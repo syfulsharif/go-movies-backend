@@ -1,11 +1,13 @@
 package main
 
 import (
-	"database/sql"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/syfulsharif/go-movies-backend/internal/repository"
+	"github.com/syfulsharif/go-movies-backend/internal/repository/dbrepo"
 )
 
 const port = 8080
@@ -13,7 +15,7 @@ const port = 8080
 type application struct {
 	DSN    string
 	Domain string
-	DB     *sql.DB
+	DB     repository.DatabaseRepo
 }
 
 func main() {
@@ -30,8 +32,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	app.DB = conn
-	defer app.DB.Close()
+	app.DB = &dbrepo.PostgresDBRepo{DB: conn}
+	defer app.DB.Connection().Close()
+
 	app.Domain = "example.com"
 
 	log.Println("Starting Application on port", port)
