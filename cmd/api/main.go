@@ -8,21 +8,21 @@ import (
 
 const port = 8080
 
-type applicatoin struct {
+type application struct {
 	Domain string
 }
 
 func main() {
 	//set application config
-	var app applicatoin
+	var app application
 	//read from command line
 
 	//connect to the database
 	app.Domain = "example.com"
+
 	log.Println("Starting Application on port", port)
-	http.HandleFunc("/", Hello)
 	//start a web server
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+	err := http.ListenAndServe(fmt.Sprintf(":%d", port), app.routes())
 	if err != nil {
 		log.Fatal(err)
 	}
